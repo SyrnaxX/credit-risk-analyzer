@@ -5,7 +5,7 @@ An end-to-end machine learning app that estimates a loan applicant's risk of def
 **🔗 Live demo:** https://credit-risk-analyzer-p1ib.onrender.com/
 *(Hosted on a free instance — the first load may take ~30 seconds to wake up.)*
 
-![CreditLens interface](docs/images/ui-home.png)
+![CreditLens interface](docs/ui-home.png)
 
 ## Features
 - Enter applicant details and loan terms, get a **High Risk / Low Risk** decision with a risk score
@@ -17,7 +17,7 @@ An end-to-end machine learning app that estimates a loan applicant's risk of def
 
 | Low Risk example | High Risk example |
 |---|---|
-| ![Low risk](docs/images/result-low.png) | ![High risk](docs/images/result-high.png) |
+| ![Low risk](docs/result-low.png) | ![High risk](docs/result-high.png) |
 
 ## Model
 - **Algorithm:** XGBoost classifier inside a scikit-learn pipeline
