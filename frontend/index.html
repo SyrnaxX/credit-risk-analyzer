@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CreditLens</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232563eb'/><path d='M28 70V45M50 70V30M72 70V55' stroke='white' stroke-width='11' stroke-linecap='round'/></svg>">
+<style>
+:root{--tx:#0f172a;--mut:#64748b;--line:#e5e7eb;--bg:#fafafa;--pri:#2563eb;--ok:#059669;--bad:#dc2626}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#fff;color:var(--tx);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:auto;padding:0 24px}
+nav{display:flex;align-items:center;gap:10px;height:64px;border-bottom:1px solid var(--line)}
+.lg{width:26px;height:26px;border-radius:7px;background:var(--pri);display:grid;place-items:center}
+nav b{font-weight:600;letter-spacing:-.01em}
+.st{margin-left:auto;font-size:.8rem;color:var(--mut);display:flex;align-items:center;gap:7px}
+.st i{width:7px;height:7px;border-radius:50%;background:#cbd5e1;transition:.4s}.st.on i{background:var(--ok)}
+.fade{animation:up .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.hero{padding:56px 0 36px}
+.hero h1{font-size:clamp(2rem,4.5vw,3rem);letter-spacing:-.035em;line-height:1.08;font-weight:650}
+.hero h1 span{color:var(--pri)}
+.hero p{color:var(--mut);margin-top:14px;max-width:520px;line-height:1.6}
+.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;padding-bottom:64px;align-items:start}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:16px;padding:28px;background:#fff}
+.lab{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);font-weight:600}
+.sec{margin:26px 0 14px;font-weight:600;font-size:.95rem;display:flex;gap:8px;align-items:center}
+.sec:first-of-type{margin-top:18px}
+.sec:after{content:"";flex:1;height:1px;background:var(--line)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:520px){.f2{grid-template-columns:1fr}}
+.fl label{display:block;font-size:.82rem;color:#334155;margin-bottom:6px;font-weight:500}
+.fl small{display:block;font-size:.74rem;color:var(--bad);min-height:0;margin-top:4px}
+.in{position:relative}
+.in span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mut);font-size:.9rem;pointer-events:none}
+.in span.r{left:auto;right:12px}
+input,select{width:100%;height:42px;border:1px solid var(--line);border-radius:10px;padding:0 12px;font:inherit;font-size:.92rem;color:var(--tx);background:#fff;transition:border-color .2s,box-shadow .2s;appearance:none}
+select{background:#fff url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5'><path d='M6 9l6 6 6-6'/></svg>") no-repeat right 12px center;padding-right:32px;cursor:pointer}
+input.p{padding-left:26px}
+input:hover,select:hover{border-color:#cbd5e1}
+input:focus,select:focus{outline:0;border-color:var(--pri);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+input.bad{border-color:var(--bad)}
+.lti{margin-top:16px;padding:14px 16px;border-radius:12px;background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;gap:16px}
+.lti b{font-size:1.25rem;color:var(--pri);min-width:56px;font-variant-numeric:tabular-nums}
+.lti .t{flex:1;height:4px;background:var(--line);border-radius:4px;overflow:hidden}.lti .t i{display:block;height:100%;width:0;background:var(--pri);transition:width .5s cubic-bezier(.2,.7,.2,1)}
+.lti em{font-style:normal;font-size:.72rem;color:var(--mut)}
+.act{display:flex;gap:10px;justify-content:space-between;margin-top:28px}
+button{font:inherit;font-size:.92rem;font-weight:550;border-radius:10px;height:42px;padding:0 20px;cursor:pointer;transition:.2s}
+.ghost{background:#fff;border:1px solid var(--line);color:var(--mut)}.ghost:hover{background:var(--bg);color:var(--tx)}
+.go{background:var(--pri);border:0;color:#fff;display:flex;align-items:center;gap:8px}
+.go:hover{background:#1d4ed8}.go:active{transform:scale(.98)}.go:disabled{opacity:.7;cursor:wait}
+.spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;display:none}
+.go.load .spin{display:block}@keyframes rot{to{transform:rotate(360deg)}}
+.res{position:sticky;top:20px;min-height:380px;display:flex;flex-direction:column}
+.res h3{font-size:1.2rem;font-weight:600;letter-spacing:-.01em;margin-top:6px}
+.empty{flex:1;display:grid;place-content:center;text-align:center;color:var(--mut);font-size:.9rem;line-height:1.6;gap:6px}
+.empty svg{margin:0 auto 6px;opacity:.5;animation:bob 3s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-5px)}}
+.out{display:none;margin-top:26px}.out.show{display:block;animation:up .5s both}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-size:.82rem;font-weight:600}
+.badge i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.badge.ok{background:#ecfdf5;color:var(--ok)}.badge.bad{background:#fef2f2;color:var(--bad)}
+.big{font-size:3.4rem;font-weight:650;letter-spacing:-.04em;margin:14px 0 2px;font-variant-numeric:tabular-nums}
+.big.ok{color:var(--ok)}.big.bad{color:var(--bad)}
+.sub{color:var(--mut);font-size:.85rem}
+.meter{position:relative;height:8px;border-radius:8px;background:#f1f5f9;margin:28px 0 8px}
+.meter i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:8px;transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+.meter i.ok{background:var(--ok)}.meter i.bad{background:var(--bad)}
+.meter u{position:absolute;top:-6px;width:2px;height:20px;background:var(--tx);border-radius:2px;transition:left .8s}
+.meter u:after{content:"threshold";position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:.66rem;color:var(--mut);text-decoration:none;white-space:nowrap}
+.scale{display:flex;justify-content:space-between;font-size:.72rem;color:var(--mut)}
+.msg{margin-top:20px;font-size:.88rem;line-height:1.6;color:#334155}
+.err{color:var(--bad)}
+.note{margin-top:auto;padding-top:18px;font-size:.72rem;color:var(--mut);border-top:1px solid var(--line)}
+</style></head><body>
+<div class="wrap">
+<nav><div class="lg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M6 19v-7M12 19V5M18 19v-4"/></svg></div><b>CreditLens</b><div class="st" id="st"><i></i><span>Connecting…</span></div></nav>
+<section class="hero fade"><h1>Make every credit<br><span>decision clearer.</span></h1><p>Enter an applicant’s details to estimate their loan default risk. Simple inputs, clear results.</p></section>
+<div class="grid">
+<section class="card fade" style="animation-delay:.1s">
+ <div class="lab">New assessment</div>
+ <div class="sec">About the applicant</div>
+ <div class="f2">
+  <div class="fl"><label>Age <small style="display:inline;color:var(--mut)">years</small></label><input type="number" id="person_age" value="30" min="18" max="100"><small id="e_person_age"></small></div>
+  <div class="fl"><label>Annual income</label><div class="in"><span>$</span><input class="p" type="number" id="person_income" value="60000" min="1"></div><small id="e_person_income"></small></div>
+  <div class="fl"><label>Home ownership</label><select id="person_home_ownership"><option value="RENT">Rent</option><option value="OWN">Own</option><option value="MORTGAGE" selected>Mortgage</option><option value="OTHER">Other</option></select></div>
+  <div class="fl"><label>Employment length</label><div class="in"><input type="number" id="person_emp_length" value="5" min="0" max="50"><span class="r">yrs</span></div><small id="e_person_emp_length"></small></div>
+ </div>
+ <div class="sec">Loan information</div>
+ <div class="f2">
+  <div class="fl"><label>Loan purpose</label><select id="loan_intent"><option value="PERSONAL">Personal</option><option value="EDUCATION">Education</option><option value="MEDICAL">Medical</option><option value="VENTURE">Venture</option><option value="HOMEIMPROVEMENT">Home improvement</option><option value="DEBTCONSOLIDATION">Debt consolidation</option></select></div>
+  <div class="fl"><label>Loan grade</label><select id="loan_grade"><option>A</option><option>B</option><option selected>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+  <div class="fl"><label>Loan amount</label><div class="in"><span>$</span><input class="p" type="number" id="loan_amnt" value="10000" min="1"></div><small id="e_loan_amnt"></small></div>
+  <div class="fl"><label>Interest rate</label><div class="in"><input type="number" id="loan_int_rate" value="11.5" step="0.1" min="0.1"><span class="r">%</span></div><small id="e_loan_int_rate"></small></div>
+ </div>
+ <div class="lti"><div><div class="lab" style="font-size:.66rem">Loan-to-income</div><b id="lti">0%</b></div><div class="t"><i id="ltiBar"></i></div><em>Auto-calculated</em></div>
+ <div class="sec">Credit history</div>
+ <div class="f2">
+  <div class="fl"><label>Previous default on file?</label><select id="cb_person_default_on_file"><option value="N">No</option><option value="Y">Yes</option></select></div>
+  <div class="fl"><label>Credit history length</label><div class="in"><input type="number" id="cb_person_cred_hist_length" value="6" min="0"><span class="r">yrs</span></div><small id="e_cb_person_cred_hist_length"></small></div>
+ </div>
+ <div class="act"><button class="ghost" id="reset">Reset form</button><button class="go" id="go"><span class="spin"></span><span id="gt">Analyze credit risk</span><span id="ga">→</span></button></div>
+</section>
+<aside class="card res fade" style="animation-delay:.2s">
+ <div class="lab">Assessment output</div><h3>Your results</h3>
+ <div class="empty" id="empty"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><b style="color:var(--tx);font-weight:600">Your insights will appear here</b>Fill in the details and select<br>Analyze credit risk.</div>
+ <div class="out" id="out">
+  <span class="badge" id="badge"><i></i><span id="bt"></span></span>
+  <div class="big" id="big">0%</div><div class="sub">Probability of default</div>
+  <div class="meter"><i id="fill"></i><u id="tick"></u></div><div class="scale"><span>0%</span><span>100%</span></div>
+  <p class="msg" id="msg"></p>
+ </div>
+ <p class="err msg" id="err"></p>
+ <div class="note">Predictions are estimates based on patterns in training data. Use as decision support, not a final decision.</div>
+</aside>
+</div></div>
+<script>
+const $=id=>document.getElementById(id);
+const NUM=['person_age','person_income','person_emp_length','loan_amnt','loan_int_rate','cb_person_cred_hist_length'];
+const STR=['person_home_ownership','loan_intent','loan_grade','cb_person_default_on_file'];
+const RULES={person_age:[18,100,'Applicant must be at least 18'],person_income:[1,1e9,'Enter a positive income'],person_emp_length:[0,50,'Must be between 0 and 50'],loan_amnt:[1,1e9,'Enter a positive amount'],loan_int_rate:[0.01,100,'Enter a positive rate'],cb_person_cred_hist_length:[0,100,'Cannot be negative']};
+const DEF={};[...NUM,...STR].forEach(k=>DEF[k]=$(k).value);
+function lti(){const i=+$('person_income').value,a=+$('loan_amnt').value,p=i>0?a/i*100:0;$('lti').textContent=p.toFixed(1)+'%';$('ltiBar').style.width=Math.min(100,p*2)+'%'}
+function valid(){let ok=true;NUM.forEach(k=>{const v=$(k).value,[mn,mx,m]=RULES[k],bad=v===''||+v<mn||+v>mx;$(k).classList.toggle('bad',bad);$('e_'+k).textContent=bad?m:'';if(bad)ok=false});return ok}
+[...NUM,...STR].forEach(k=>$(k).addEventListener('input',()=>{lti();if($(k).classList.contains('bad'))valid()}));lti();
+$('reset').onclick=()=>{[...NUM,...STR].forEach(k=>{$(k).value=DEF[k];$(k).classList.remove('bad');if($('e_'+k))$('e_'+k).textContent=''});lti();$('out').classList.remove('show');$('empty').style.display='';$('err').textContent=''};
+fetch('/health').then(r=>r.json()).then(h=>{if(h.model){$('st').classList.add('on');$('st').lastChild.textContent='API connected · v'+h.Version}}).catch(()=>$('st').lastChild.textContent='API offline');
+function count(el,to){const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/1100);el.textContent=(to*(1-Math.pow(1-k,3))).toFixed(1)+'%';if(k<1)requestAnimationFrame(f)})(t0)}
+$('go').onclick=async()=>{
+ $('err').textContent='';if(!valid())return;
+ const b=$('go');b.disabled=true;b.classList.add('load');$('gt').textContent='Analyzing…';$('ga').style.display='none';
+ const body={};NUM.forEach(k=>body[k]=['person_age','person_emp_length','cb_person_cred_hist_length'].includes(k)?parseInt($(k).value):parseFloat($(k).value));STR.forEach(k=>body[k]=$(k).value);
+ try{
+  const r=await fetch('/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json();if(!r.ok)throw new Error(Array.isArray(d.detail)?d.detail.map(x=>x.loc.slice(-1)+': '+x.msg).join('; '):d.detail);
+  const p=d.default_probability,t=d.threshold,high=d.Result==='High Risk',c=high?'bad':'ok';
+  $('empty').style.display='none';const o=$('out');o.classList.remove('show');void o.offsetWidth;o.classList.add('show');
+  $('badge').className='badge '+c;$('bt').textContent=d.Result;$('big').className='big '+c;
+  const f=$('fill');f.className=c;f.style.width='0';$('tick').style.left=(t*100)+'%';requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.width=(p*100)+'%'));
+  count($('big'),p*100);
+  $('msg').textContent=high?`The estimated default probability is above the model’s ${(t*100).toFixed(1)}% decision threshold, so this application is flagged as high risk.`:`The estimated default probability is below the model’s ${(t*100).toFixed(1)}% decision threshold, so this application is considered low risk.`;
+ }catch(e){$('err').textContent='Error: '+e.message}
+ b.disabled=false;b.classList.remove('load');$('gt').textContent='Analyze credit risk';$('ga').style.display='';
+};
+</script></body></html>
