@@ -2,7 +2,7 @@
 
 An end-to-end machine learning app that estimates a loan applicant's risk of default. An XGBoost model is served by a FastAPI backend, with a clean web interface on top.
 
-**🔗 Live demo:** https://YOUR-APP-NAME.onrender.com
+**🔗 Live demo:** https://credit-risk-analyzer-p1ib.onrender.com/
 *(Hosted on a free instance — the first load may take ~30 seconds to wake up.)*
 
 ![CreditLens interface](docs/images/ui-home.png)
@@ -24,16 +24,6 @@ An end-to-end machine learning app that estimates a loan applicant's risk of def
 - **Data:** Credit Risk Dataset (loan applicants, ~32k rows), target `loan_status`
 - **Inputs:** age, income, home ownership, employment length, loan purpose, loan grade, loan amount, interest rate, previous default, credit history length, loan-to-income ratio
 - **Decision threshold:** tuned and stored in `model/best_threshold`
-
-### Calibration
-![Calibration curve](docs/images/calibration.png)
-
-The model's scores are used for ranking and thresholding. The calibration curve shows how the raw score compares with the observed default rate, so the score should be read as a **risk score**, not a literal real-world probability.
-
-### Explainability (SHAP)
-| Feature importance | Effect on predictions |
-|---|---|
-| ![SHAP bar](docs/images/shap-bar.png) | ![SHAP summary](docs/images/shap-summary.png) |
 
 ## Tech stack
 Python · XGBoost · scikit-learn · pandas · FastAPI · Pydantic · Uvicorn · HTML/CSS/JavaScript · Docker · Render
